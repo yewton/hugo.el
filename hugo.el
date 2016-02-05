@@ -3,7 +3,7 @@
 ;; Copyright (C) 2016 yewton
 
 ;; Author: yewton <yewton@gmail.com>
-;; Version: 0.0.2
+;; Version: 0.1.0
 ;; URL: https://github.com/yewton/hugo.el
 ;; Keywords: hugo
 
