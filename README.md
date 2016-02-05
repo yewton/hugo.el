@@ -35,6 +35,10 @@ Find a site directory.
 
 Add a new content to current site.
 
+### `hugo-put-image` ###
+
+Fetch a remote image file and insert it at point.
+
 ### `hugo-start-server` ###
 
 Start hugo-server for current site.

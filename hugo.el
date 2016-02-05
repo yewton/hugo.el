@@ -83,6 +83,12 @@
   :type 'string
   :group 'hugo)
 
+(defcustom hugo-images-dir
+  "img"
+  "Directory to where put images."
+  :type 'string
+  :group 'hugo)
+
 (defvar hugo--themes-table nil)
 (defvar hugo-buffer "*Hugo*")
 (defvar hugo-server-process nil)
@@ -239,6 +245,31 @@
         (error "Failed to update. Check %s." hugo-buffer))
     (error "Failed to prepare. Check %s." hugo-buffer)))
 
+;;;###autoload
+(defun hugo-put-image (url path)
+  "Fetch a remote image file and insert it at point."
+  (interactive
+   (let* ((url (read-string "URL: " (hugo--put-image-default-url)))
+          (default-path (hugo--put-image-default-path url)))
+     (list url (read-file-name "Save as: " nil default-path nil default-path))))
+  (f-mkdir (f-dirname path))
+  (url-copy-file url path t)
+  (let ((title (f-base url)))
+    (insert (format "![%s](%s \"%s\")" title (f-relative path default-directory) title))))
+
+(defun hugo--put-image-default-url ()
+  (let ((text (if (fboundp 'x-get-clipboard) (x-get-clipboard)
+                (if (< 0 (safe-length kill-ring))
+                    (substring-no-properties (first kill-ring)) ""))))
+    (if (s-match "^\\(?:http\\|ftp\\|https\\)://" text) text "")))
+
+(defun hugo--put-image-default-path (url)
+  (let ((filename (f-filename url)))
+    (if (hugo-site-p)
+        (let ((dir (f-join (hugo-root-dir) "static" hugo-images-dir (f-base buffer-file-name))))
+          (f-join dir filename))
+      (f-join default-directory filename))))
+
 (defun hugo--update-themes-list ()
   (with-hugo-default-directory (hugo-themes-list-dir)
     (hugo-call-process "git" "--no-pager" "pull" "-v")))
@@ -249,6 +280,10 @@
 
 (defun hugo-config-file ()
   (hugo--config-file-1 default-directory))
+
+(defun hugo-site-p (&optional directory)
+  (let ((default-directory (or directory default-directory)))
+    (not (null (hugo-root-dir)))))
 
 (defun hugo--config-file-1 (path)
   (or (-reduce-from (lambda (memo item)
