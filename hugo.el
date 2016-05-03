@@ -255,7 +255,7 @@
   (f-mkdir (f-dirname path))
   (url-copy-file url path t)
   (let ((title (f-base url)))
-    (insert (format "![%s](%s \"%s\")" title (f-relative path default-directory) title))))
+    (insert (format "![%s](%s \"%s\")" title (hugo--put-image-link-url path) title))))
 
 (defun hugo--put-image-default-url ()
   (let ((text (if (fboundp 'x-get-clipboard) (x-get-clipboard)
@@ -269,6 +269,12 @@
         (let ((dir (f-join (hugo-root-dir) "static" hugo-images-dir (f-base buffer-file-name))))
           (f-join dir filename))
       (f-join default-directory filename))))
+
+(defun hugo--put-image-link-url (path)
+  (let ((url (f-relative path default-directory)))
+    (if (hugo-site-p)
+        (replace-regexp-in-string ".*/static/\\(.*\\)" "/\\1" url)
+      url)))
 
 (defun hugo--update-themes-list ()
   (with-hugo-default-directory (hugo-themes-list-dir)
