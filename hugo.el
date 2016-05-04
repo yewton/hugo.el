@@ -133,7 +133,7 @@
   (interactive)
   (-if-let (root (hugo-root-dir))
       (let* ((default (format-time-string "post/%Y-%m-%d_%H%M%S.md"))
-             (path (read-string (format "Content name(default: %s): " default) nil nil default)))
+             (path (read-string (format "Content name(default: %s): " default) default nil default)))
         (if (with-hugo-default-directory root
               (hugo-call-process hugo-executable "new" path))
             (find-file (f-join root "content" path))
