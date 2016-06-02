@@ -209,7 +209,9 @@
 (defun hugo-install-theme (theme)
   "Add a theme as submodule to current site."
   (interactive (list (progn
-                       (unless hugo--themes-table (hugo--prepare-themes-list))
+                       (unless hugo--themes-table
+                         (hugo--prepare-themes-list)
+                         (hugo--reset-themes-table))
                        (completing-read "Theme: " (ht-keys hugo--themes-table) nil t))))
   (unless (hugo-root-dir)
     (error "Not in a Hugo site."))
@@ -233,6 +235,9 @@
           (ht-set! themes (match-string 1) (match-string 2)))
         themes))))
 
+(defun hugo--reset-themes-table ()
+  (setq hugo--themes-table (hugo--build-themes-table)))
+
 ;;;###autoload
 (defun hugo-update-themes-list ()
   "Update submodules of themes."
@@ -240,7 +245,7 @@
   (if (hugo--prepare-themes-list)
       (if (hugo--update-themes-list)
           (progn
-            (setq hugo--themes-table (hugo--build-themes-table))
+            (hugo--reset-themes-table)
             (message "Updated."))
         (error "Failed to update. Check %s." hugo-buffer))
     (error "Failed to prepare. Check %s." hugo-buffer)))
