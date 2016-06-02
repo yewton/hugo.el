@@ -209,7 +209,7 @@
 (defun hugo-install-theme (theme)
   "Add a theme as submodule to current site."
   (interactive (list (progn
-                       (unless hugo--themes-table (hugo--prepare-themes-list))
+                       (unless hugo--themes-table (hugo-update-themes-list))
                        (completing-read "Theme: " (ht-keys hugo--themes-table) nil t))))
   (unless (hugo-root-dir)
     (error "Not in a Hugo site."))
