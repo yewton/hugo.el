@@ -6,6 +6,7 @@
 ;; Version: 0.1.2
 ;; URL: https://github.com/yewton/hugo.el
 ;; Keywords: hugo
+;; Package-Requires: ((f "0.19.0") (dash "2.13.0") (ht "2.2"))
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
