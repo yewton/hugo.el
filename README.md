@@ -1,5 +1,7 @@
 # hugo.el #
 
+**No longer maintained. See https://github.com/masasam/emacs-easy-hugo or https://github.com/kaushalmodi/ox-hugo.**
+
 Some helper functions for creating a Website with [Hugo](https://gohugo.io/).
 
 ## Installation ##
